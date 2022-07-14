@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { deleteTweet, isTweetLiked, saveTweet } from "../../lib/favourites";
-import { Tweet } from "../../lib/schema";
+import { deleteTweet, isTweetLiked, saveTweet } from "../lib/favourites";
+import { Tweet } from "../lib/schema";
 
 interface IProps {
   tweet: Tweet;

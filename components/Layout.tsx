@@ -144,7 +144,7 @@ export default function Layout({ children }: IProps) {
                   <div className="mt-5 flex-1 h-0 overflow-y-auto">
                     <nav className="px-2 space-y-1">
                       {navigation.map((item) => (
-                        <Link href={item.href}>
+                        <Link href={item.href} key={item.href}>
                           <a
                             key={item.name}
                             className={classNames(
@@ -191,7 +191,7 @@ export default function Layout({ children }: IProps) {
               <div className="mt-5 flex-grow flex flex-col">
                 <nav className="flex-1 px-2 pb-4 space-y-1">
                   {navigation.map((item) => (
-                    <Link href={item.href}>
+                    <Link href={item.href} key={item.href}>
                       <a
                         key={item.name}
                         className={classNames(

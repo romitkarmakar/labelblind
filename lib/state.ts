@@ -3,7 +3,11 @@ import { ILayoutState } from "./schema";
 
 export const initialLayoutState: ILayoutState = {
     search: "",
-    setSearch: () => {}
+    setSearch: () => { },
+    filter: {
+        startDate: null,
+        endDate: null
+    }
 }
 
 const Context = createContext<ILayoutState>(initialLayoutState);
