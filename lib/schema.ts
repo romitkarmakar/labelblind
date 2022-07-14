@@ -76,3 +76,8 @@ export interface User {
     username: string
     profile_image_url: string
 }
+
+export interface ILayoutState {
+    search: string;
+    setSearch: Function;
+}

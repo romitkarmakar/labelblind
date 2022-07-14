@@ -4,6 +4,7 @@ import SEO from "../components/SEO";
 import TweetCard from "../components/TweetCard";
 import { fetchData } from "../lib/api";
 import { Tweet } from "../lib/schema";
+import Context from "../lib/state";
 
 interface IProps {
   tweets: Tweet[];
@@ -14,14 +15,28 @@ export default function IndexPage({ tweets }: IProps) {
     <>
       <SEO title="LabelBlind: Digitising Food Labelling" />
       <Layout>
-        <div className="p-16">
-          <div className="flex flex-col items-center">
-            {tweets.map((tweet, index) => {
-              return (
-                <TweetCard animate={index > 3} tweet={tweet} key={tweet._id} />
-              );
-            })}
-          </div>
+        <div className="p-4">
+          <Context.Consumer>
+            {(state) => (
+              <div className="flex flex-col items-center">
+                {tweets
+                  .filter((tweet) =>
+                    tweet.text
+                      .toLowerCase()
+                      .includes(state.search.toLowerCase())
+                  )
+                  .map((tweet, index) => {
+                    return (
+                      <TweetCard
+                        animate={index > 3}
+                        tweet={tweet}
+                        key={tweet._id}
+                      />
+                    );
+                  })}
+              </div>
+            )}
+          </Context.Consumer>
         </div>
       </Layout>
     </>

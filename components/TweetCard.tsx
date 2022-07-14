@@ -34,7 +34,7 @@ export default function TweetCard({ tweet, animate }: IProps) {
               </a>
             </Link>
             <div className="flex justify-between mt-4">
-              <Like likes={tweet.likes} />
+              <Like tweet={tweet} />
               <div className="inline-flex items-center text-gray-500 hover:text-blue-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
