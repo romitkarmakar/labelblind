@@ -11,9 +11,14 @@ import { SearchIcon } from "@heroicons/react/solid";
 import Context, { initialLayoutState } from "../lib/state";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { DateFilter } from "./DateFilter";
 import { Moment } from "moment";
 import { IFilter } from "../lib/schema";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const DateFilter = dynamic(() => import("./DateFilter"), {
+  suspense: true,
+});
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
@@ -131,9 +136,9 @@ export default function Layout({ children }: IProps) {
                   </Transition.Child>
                   <div className="flex-shrink-0 flex items-center px-4">
                     <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                      alt="Workflow"
+                      className="h-14 w-auto"
+                      src="https://www.labelblind.com/Final%20Logo_LabelBlind.jpg"
+                      alt="LabelBlind"
                     />
                   </div>
                   <div className="mt-5 flex-1 h-0 overflow-y-auto">
@@ -143,7 +148,7 @@ export default function Layout({ children }: IProps) {
                           <a
                             key={item.name}
                             className={classNames(
-                              item.current
+                              router.asPath == item.href
                                 ? "bg-gray-100 text-gray-900"
                                 : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                               "group flex items-center px-2 py-2 text-base font-medium rounded-md"
@@ -268,38 +273,40 @@ export default function Layout({ children }: IProps) {
                 </div>
               </div>
               {filterOpen ? (
-                <div className="flex flex-col md:flex-row md:h-16 p-4 md:items-center bg-white shadow">
-                  <p className="text-gray-500 text-sm mr-2 mb-2 md:mb-0">
-                    Start Date
-                  </p>
-                  <DateFilter
-                    date={startDate}
-                    setDate={(d) => setStartDate(d as Moment)}
-                  />
-                  <p className="text-gray-500 text-sm mr-2 ml-4 mt-4 md:mt-0 mb-2 md:mb-0">
-                    End Date
-                  </p>
-                  <DateFilter
-                    minDate={startDate}
-                    date={endDate}
-                    setDate={(d) => setEndDate(d as Moment)}
-                  />
-                  <div className="flex-grow mt-4 md:mt-0" />
-                  <div className="inline-flex flex-col md:flex-row-reverse">
-                    <button
-                      className="bg-blue-500 text-white py-2 px-4 rounded-md"
-                      onClick={applyFilter}
-                    >
-                      Apply Filter
-                    </button>
-                    <button
-                      className="py-2 px-4 text-blue-500 md:mr-2 mt-2 md:mt-0"
-                      onClick={resetFilter}
-                    >
-                      Reset Filter
-                    </button>
+                <Suspense fallback={<span className="m-4 text-gray-500">Loading...</span>}>
+                  <div className="flex flex-col md:flex-row md:h-16 p-4 md:items-center bg-white shadow">
+                    <p className="text-gray-500 text-sm mr-2 mb-2 md:mb-0">
+                      Start Date
+                    </p>
+                    <DateFilter
+                      date={startDate}
+                      setDate={(d) => setStartDate(d as Moment)}
+                    />
+                    <p className="text-gray-500 text-sm mr-2 ml-4 mt-4 md:mt-0 mb-2 md:mb-0">
+                      End Date
+                    </p>
+                    <DateFilter
+                      minDate={startDate}
+                      date={endDate}
+                      setDate={(d) => setEndDate(d as Moment)}
+                    />
+                    <div className="flex-grow mt-4 md:mt-0" />
+                    <div className="inline-flex flex-col md:flex-row-reverse">
+                      <button
+                        className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                        onClick={applyFilter}
+                      >
+                        Apply Filter
+                      </button>
+                      <button
+                        className="py-2 px-4 text-blue-500 md:mr-2 mt-2 md:mt-0"
+                        onClick={resetFilter}
+                      >
+                        Reset Filter
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </Suspense>
               ) : null}
             </div>
             <main className="flex-1">

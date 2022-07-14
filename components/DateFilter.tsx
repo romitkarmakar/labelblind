@@ -10,7 +10,7 @@ interface IProps {
   minDate?: Moment | null;
 }
 
-export function DateFilter(props: IProps) {
+export default function DateFilter(props: IProps) {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterMoment}>

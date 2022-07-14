@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 import TweetCard from "../components/TweetCard";
 import { fetchLikedTweets } from "../lib/favourites";
 import { Tweet } from "../lib/schema";
@@ -16,6 +17,8 @@ export default function FavouritesPage() {
   }, []);
 
   return (
+    <>
+    <SEO title="LabelBlind: Your Favourite Tweets" />
     <Layout>
       <div className="p-4">
         <Context.Consumer>
@@ -58,5 +61,6 @@ export default function FavouritesPage() {
         </Context.Consumer>
       </div>
     </Layout>
+    </>
   );
 }
