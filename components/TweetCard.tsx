@@ -30,7 +30,7 @@ export default function TweetCard({ tweet, animate }: IProps) {
 
   return (
     <AnimationOnScroll animateIn="animate__fadeIn" initiallyVisible={!animate}>
-      <div className="shadow-lg rounded-lg p-8 my-2 hover:bg-gray-100 max-w-2xl">
+      <div className="shadow-lg rounded-lg p-4 md:p-8 my-2 hover:bg-gray-100 max-w-2xl">
         <div className="flex items-start">
           <UserAvatar
             name={tweet.author}
