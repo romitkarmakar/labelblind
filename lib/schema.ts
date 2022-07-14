@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 interface PublishedTimestamp {
     $numberLong: string;
 }
@@ -80,4 +82,10 @@ export interface User {
 export interface ILayoutState {
     search: string;
     setSearch: Function;
+    filter: IFilter;
+}
+
+export interface IFilter {
+    startDate: Moment | null;
+    endDate: Moment | null;
 }

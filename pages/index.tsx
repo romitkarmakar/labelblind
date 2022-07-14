@@ -1,3 +1,4 @@
+import moment from "moment";
 import { GetServerSideProps } from "next";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
@@ -24,7 +25,26 @@ export default function IndexPage({ tweets }: IProps) {
                     tweet.text
                       .toLowerCase()
                       .includes(state.search.toLowerCase())
-                  )
+                  ).filter((tweet) => {
+                    let publishedDate = moment(tweet.publishedDate)
+
+                    if (state.filter.startDate && state.filter.endDate) {
+                      if (publishedDate.isBefore(state.filter.endDate) && publishedDate.isAfter(state.filter.startDate)) return true;
+                      else return false;
+                    }
+                    
+                    if (state.filter.startDate) {
+                      if (publishedDate.isAfter(state.filter.startDate)) return true;
+                      else return false;
+                    }
+
+                    if (state.filter.endDate) {
+                      if (publishedDate.isBefore(state.filter.endDate)) return true;
+                      else return false;
+                    }
+
+                    return true;
+                  })
                   .map((tweet, index) => {
                     return (
                       <TweetCard

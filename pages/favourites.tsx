@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import TweetCard from "../components/TweetCard";
@@ -23,7 +24,26 @@ export default function FavouritesPage() {
               {tweets
                 .filter((tweet) =>
                   tweet.text.toLowerCase().includes(state.search.toLowerCase())
-                )
+                ).filter((tweet) => {
+                  let publishedDate = moment(tweet.publishedDate)
+
+                  if (state.filter.startDate && state.filter.endDate) {
+                    if (publishedDate.isBefore(state.filter.endDate) && publishedDate.isAfter(state.filter.startDate)) return true;
+                    else return false;
+                  }
+                  
+                  if (state.filter.startDate) {
+                    if (publishedDate.isAfter(state.filter.startDate)) return true;
+                    else return false;
+                  }
+
+                  if (state.filter.endDate) {
+                    if (publishedDate.isBefore(state.filter.endDate)) return true;
+                    else return false;
+                  }
+
+                  return true;
+                })
                 .map((tweet, index) => {
                   return (
                     <TweetCard

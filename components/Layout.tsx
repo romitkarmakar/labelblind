@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import {
   FolderIcon,
   HomeIcon,
@@ -11,6 +11,9 @@ import { SearchIcon } from "@heroicons/react/solid";
 import Context, { initialLayoutState } from "../lib/state";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { DateFilter } from "./DateFilter";
+import { Moment } from "moment";
+import { IFilter } from "../lib/schema";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
@@ -38,7 +41,33 @@ interface IProps {
 export default function Layout({ children }: IProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Moment | null>(null);
+  const [endDate, setEndDate] = useState<Moment | null>(null);
   const router = useRouter();
+  const [filter, setFilter] = useState<IFilter>({
+    startDate: null,
+    endDate: null,
+  });
+
+  const applyFilter = () => {
+    setFilter({
+      startDate: startDate,
+      endDate: endDate,
+    });
+    setFilterOpen(false);
+  };
+
+  const resetFilter = () => {
+    setStartDate(null);
+    setEndDate(null);
+
+    setFilter({
+      startDate: null,
+      endDate: null,
+    });
+    setFilterOpen(false);
+  };
 
   return (
     <>
@@ -46,6 +75,7 @@ export default function Layout({ children }: IProps) {
         value={{
           search,
           setSearch,
+          filter,
         }}
       >
         <div>
@@ -110,26 +140,26 @@ export default function Layout({ children }: IProps) {
                     <nav className="px-2 space-y-1">
                       {navigation.map((item) => (
                         <Link href={item.href}>
-                        <a
-                          key={item.name}
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                            "group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                          )}
-                        >
-                          <item.icon
+                          <a
+                            key={item.name}
                             className={classNames(
-                              router.asPath == item.href
-                                ? "text-gray-500"
-                                : "text-gray-400 group-hover:text-gray-500",
-                              "mr-4 flex-shrink-0 h-6 w-6"
+                              item.current
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                              "group flex items-center px-2 py-2 text-base font-medium rounded-md"
                             )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
+                          >
+                            <item.icon
+                              className={classNames(
+                                router.asPath == item.href
+                                  ? "text-gray-500"
+                                  : "text-gray-400 group-hover:text-gray-500",
+                                "mr-4 flex-shrink-0 h-6 w-6"
+                              )}
+                              aria-hidden="true"
+                            />
+                            {item.name}
+                          </a>
                         </Link>
                       ))}
                     </nav>
@@ -184,88 +214,93 @@ export default function Layout({ children }: IProps) {
             </div>
           </div>
           <div className="md:pl-64 flex flex-col flex-1">
-            <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
-              <button
-                type="button"
-                className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-                onClick={() => setSidebarOpen(true)}
-              >
-                <span className="sr-only">Open sidebar</span>
-                <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
-              </button>
-              <div className="flex-1 px-4 flex justify-between">
-                <div className="flex-1 flex">
-                  <form className="w-full flex md:ml-0" action="#" method="GET">
-                    <label htmlFor="search-field" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                      <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                        <SearchIcon className="h-5 w-5" aria-hidden="true" />
-                      </div>
-                      <input
-                        id="search-field"
-                        className="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
-                        placeholder="Search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        type="search"
-                        name="search"
-                      />
-                    </div>
-                  </form>
-                </div>
-                <div className="ml-4 flex items-center md:ml-6">
-                  <button
-                    type="button"
-                    className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <AdjustmentsIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-
-                  {/* Profile dropdown */}
-                  <Menu as="div" className="ml-3 relative">
-                    <div>
-                      <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
+            <div className="sticky top-0 z-10">
+              <div className="flex-shrink-0 flex h-16 bg-white shadow">
+                <button
+                  type="button"
+                  className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+                  onClick={() => setSidebarOpen(true)}
+                >
+                  <span className="sr-only">Open sidebar</span>
+                  <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
+                </button>
+                <div className="flex-1 px-4 flex justify-between">
+                  <div className="flex-1 flex">
+                    <form
+                      className="w-full flex md:ml-0"
+                      action="#"
+                      method="GET"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        {userNavigation.map((item) => (
-                          <Menu.Item key={item.name}>
-                            {({ active }) => (
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {item.name}
-                              </a>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
+                      <label htmlFor="search-field" className="sr-only">
+                        Search
+                      </label>
+                      <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                          <SearchIcon className="h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <input
+                          id="search-field"
+                          className="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
+                          placeholder="Search"
+                          value={search}
+                          onChange={(e) => setSearch(e.target.value)}
+                          type="search"
+                          name="search"
+                        />
+                      </div>
+                    </form>
+                  </div>
+                  <div className="ml-4 flex items-center md:ml-6">
+                    <button
+                      type="button"
+                      onClick={() => setFilterOpen(!filterOpen)}
+                      className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-0"
+                    >
+                      <span className="sr-only">View notifications</span>
+                      <AdjustmentsIcon
+                        className={
+                          "h-6 w-6 " + (filterOpen ? "text-blue-500" : "")
+                        }
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
+              {filterOpen ? (
+                <div className="flex flex-col md:flex-row md:h-16 p-4 md:items-center bg-white shadow">
+                  <p className="text-gray-500 text-sm mr-2 mb-2 md:mb-0">
+                    Start Date
+                  </p>
+                  <DateFilter
+                    date={startDate}
+                    setDate={(d) => setStartDate(d as Moment)}
+                  />
+                  <p className="text-gray-500 text-sm mr-2 ml-4 mt-4 md:mt-0 mb-2 md:mb-0">
+                    End Date
+                  </p>
+                  <DateFilter
+                    minDate={startDate}
+                    date={endDate}
+                    setDate={(d) => setEndDate(d as Moment)}
+                  />
+                  <div className="flex-grow mt-4 md:mt-0" />
+                  <div className="inline-flex flex-col md:flex-row-reverse">
+                    <button
+                      className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                      onClick={applyFilter}
+                    >
+                      Apply Filter
+                    </button>
+                    <button
+                      className="py-2 px-4 text-blue-500 md:mr-2 mt-2 md:mt-0"
+                      onClick={resetFilter}
+                    >
+                      Reset Filter
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
             <main className="flex-1">
               <div className="py-4">

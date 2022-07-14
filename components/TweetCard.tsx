@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AnimationOnScroll } from "react-animation-on-scroll";
 import { Tweet } from "../lib/schema";
 import { generateRandomColor, getInitials } from "../lib/util";
@@ -17,16 +18,26 @@ export default function TweetCard({ tweet, animate }: IProps) {
           <UserAvatar
             name={tweet.author}
             image={tweet.extra?.includes?.users[0].profile_image_url}
+            onlyLarge
           />
           <div className="ml-3">
             <Link href={tweet.url} passHref>
               <a target="_blank">
-                <div className="inline-flex items-center">
-                  <span className="font-bold text-lg">
-                    {tweet.extra?.includes?.users[0].name}
-                  </span>
-                  <span className="text-gray-500 ml-1">@{tweet.author}</span>
+                <div className="flex mb-3 md:mb-0">
+                  <div className="block md:hidden">
+                    <UserAvatar
+                      name={tweet.author}
+                      image={tweet.extra?.includes?.users[0].profile_image_url}
+                    />
+                  </div>
+                  <div className="inline-flex md:items-center flex-col md:flex-row items-start ml-2 md:ml-0">
+                    <span className="font-bold text-lg mr-1">
+                      {tweet.extra?.includes?.users[0].name}
+                    </span>
+                    <span className="text-gray-500">@{tweet.author}</span>
+                  </div>
                 </div>
+
                 <p>{tweet.text}</p>
                 <p className="text-gray-500 text-sm mt-2">
                   Posted on {new Date(tweet.publishedDate).toDateString()}
@@ -60,7 +71,20 @@ export default function TweetCard({ tweet, animate }: IProps) {
   );
 }
 
-function UserAvatar({ image, name }: any) {
+function UserAvatar({ image, name, onlyLarge }: any) {
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    if (window.screen.width < 768 && onlyLarge) setShow(false);
+
+    addEventListener("resize", (event) => {
+      if (window.screen.width < 768 && onlyLarge) setShow(false);
+      else setShow(true);
+    });
+  }, []);
+
+  if (!show) return <></>;
+
   if (image)
     return <img src={image} className="w-12 h-12 rounded-full object-cover" />;
   else
