@@ -1,78 +1,78 @@
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
 import {
   FolderIcon,
   HomeIcon,
   MenuAlt2Icon,
   AdjustmentsIcon,
   XIcon,
-} from "@heroicons/react/outline";
-import { SearchIcon } from "@heroicons/react/solid";
-import Context, { initialLayoutState } from "../lib/state";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { Moment } from "moment";
-import { IFilter } from "../lib/schema";
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
+} from '@heroicons/react/outline'
+import { SearchIcon } from '@heroicons/react/solid'
+import Context, { initialLayoutState } from '../lib/state'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { Moment } from 'moment'
+import { IFilter } from '../lib/schema'
+import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 
-const DateFilter = dynamic(() => import("./DateFilter"), {
+const DateFilter = dynamic(() => import('./DateFilter'), {
   suspense: true,
-});
+})
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
   {
-    name: "Liked Posts",
-    href: "/favourites",
+    name: 'Liked Posts',
+    href: '/favourites',
     icon: FolderIcon,
     current: false,
   },
-];
+]
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+  { name: 'Your Profile', href: '#' },
+  { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#' },
+]
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ')
 }
 
 interface IProps {
-  children: JSX.Element;
+  children: JSX.Element
 }
 
 export default function Layout({ children }: IProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [startDate, setStartDate] = useState<Moment | null>(null);
-  const [endDate, setEndDate] = useState<Moment | null>(null);
-  const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [startDate, setStartDate] = useState<Moment | null>(null)
+  const [endDate, setEndDate] = useState<Moment | null>(null)
+  const router = useRouter()
   const [filter, setFilter] = useState<IFilter>({
     startDate: null,
     endDate: null,
-  });
+  })
 
   const applyFilter = () => {
     setFilter({
       startDate: startDate,
       endDate: endDate,
-    });
-    setFilterOpen(false);
-  };
+    })
+    setFilterOpen(false)
+  }
 
   const resetFilter = () => {
-    setStartDate(null);
-    setEndDate(null);
+    setStartDate(null)
+    setEndDate(null)
 
     setFilter({
       startDate: null,
       endDate: null,
-    });
-    setFilterOpen(false);
-  };
+    })
+    setFilterOpen(false)
+  }
 
   return (
     <>
@@ -149,17 +149,17 @@ export default function Layout({ children }: IProps) {
                             key={item.name}
                             className={classNames(
                               router.asPath == item.href
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                              "group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                                ? 'bg-gray-100 text-gray-900'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                              'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                             )}
                           >
                             <item.icon
                               className={classNames(
                                 router.asPath == item.href
-                                  ? "text-gray-500"
-                                  : "text-gray-400 group-hover:text-gray-500",
-                                "mr-4 flex-shrink-0 h-6 w-6"
+                                  ? 'text-gray-500'
+                                  : 'text-gray-400 group-hover:text-gray-500',
+                                'mr-4 flex-shrink-0 h-6 w-6'
                               )}
                               aria-hidden="true"
                             />
@@ -196,17 +196,17 @@ export default function Layout({ children }: IProps) {
                         key={item.name}
                         className={classNames(
                           router.asPath == item.href
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                          "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                          'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                         )}
                       >
                         <item.icon
                           className={classNames(
                             item.current
-                              ? "text-gray-500"
-                              : "text-gray-400 group-hover:text-gray-500",
-                            "mr-3 flex-shrink-0 h-6 w-6"
+                              ? 'text-gray-500'
+                              : 'text-gray-400 group-hover:text-gray-500',
+                            'mr-3 flex-shrink-0 h-6 w-6'
                           )}
                           aria-hidden="true"
                         />
@@ -264,7 +264,7 @@ export default function Layout({ children }: IProps) {
                       <span className="sr-only">View notifications</span>
                       <AdjustmentsIcon
                         className={
-                          "h-6 w-6 " + (filterOpen ? "text-blue-500" : "")
+                          'h-6 w-6 ' + (filterOpen ? 'text-blue-500' : '')
                         }
                         aria-hidden="true"
                       />
@@ -273,7 +273,11 @@ export default function Layout({ children }: IProps) {
                 </div>
               </div>
               {filterOpen ? (
-                <Suspense fallback={<span className="m-4 text-gray-500">Loading...</span>}>
+                <Suspense
+                  fallback={
+                    <span className="m-4 text-gray-500">Loading...</span>
+                  }
+                >
                   <div className="flex flex-col md:flex-row md:h-16 p-4 md:items-center bg-white shadow">
                     <p className="text-gray-500 text-sm mr-2 mb-2 md:mb-0">
                       Start Date
@@ -320,5 +324,5 @@ export default function Layout({ children }: IProps) {
         </div>
       </Context.Provider>
     </>
-  );
+  )
 }

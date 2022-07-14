@@ -1,37 +1,37 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { deleteTweet, isTweetLiked, saveTweet } from "../lib/favourites";
-import { Tweet } from "../lib/schema";
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { deleteTweet, isTweetLiked, saveTweet } from '../lib/favourites'
+import { Tweet } from '../lib/schema'
 
 interface IProps {
-  tweet: Tweet;
+  tweet: Tweet
 }
 
 export default function Like({ tweet }: IProps) {
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(false)
 
   useEffect(() => {
     if (isTweetLiked(tweet._id)) {
-      setLiked(true);
+      setLiked(true)
     }
-  }, []);
+  }, [])
 
   const like = () => {
     if (!liked) {
-      saveTweet(tweet);
-      setLiked(true);
+      saveTweet(tweet)
+      setLiked(true)
     } else {
-      deleteTweet(tweet._id);
-      setLiked(false);
+      deleteTweet(tweet._id)
+      setLiked(false)
     }
-  };
+  }
 
   return (
     <div className="inline-flex items-center hover:text-red-500">
       <button onClick={like}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={"h-6 w-6 " + (liked ? "fill-red-500" : "fill-gray-400")}
+          className={'h-6 w-6 ' + (liked ? 'fill-red-500' : 'fill-gray-400')}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -48,5 +48,5 @@ export default function Like({ tweet }: IProps) {
         {parseInt(tweet.likes) + (liked ? 1 : 0)}
       </span>
     </div>
-  );
+  )
 }

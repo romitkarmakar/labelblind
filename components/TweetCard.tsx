@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { AnimationOnScroll } from "react-animation-on-scroll";
-import { Tweet } from "../lib/schema";
-import { generateRandomColor, getInitials } from "../lib/util";
-import Like from "./Like";
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { AnimationOnScroll } from 'react-animation-on-scroll'
+import { Tweet } from '../lib/schema'
+import { generateRandomColor, getInitials } from '../lib/util'
+import Like from './Like'
 
 interface IProps {
-  tweet: Tweet;
-  animate: boolean;
+  tweet: Tweet
+  animate: boolean
 }
 
 export default function TweetCard({ tweet, animate }: IProps) {
@@ -19,16 +19,14 @@ export default function TweetCard({ tweet, animate }: IProps) {
             url: tweet.url,
             text: tweet.text,
           })
-          .then(() => console.log("Successfully shared the tweet"));
+          .then(() => console.log('Successfully shared the tweet'))
       } catch (error) {
-        console.log(`Failed to share tweet: ${error}`);
+        console.log(`Failed to share tweet: ${error}`)
       }
     } else {
-      console.log(
-        "Web share is currently not supported on this browser."
-      );
+      console.log('Web share is currently not supported on this browser.')
     }
-  };
+  }
 
   return (
     <AnimationOnScroll animateIn="animate__fadeIn" initiallyVisible={!animate}>
@@ -113,25 +111,25 @@ export default function TweetCard({ tweet, animate }: IProps) {
         </div>
       </div>
     </AnimationOnScroll>
-  );
+  )
 }
 
 function UserAvatar({ image, name, onlyLarge }: any) {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(true)
 
   useEffect(() => {
-    if (window.screen.width < 768 && onlyLarge) setShow(false);
+    if (window.screen.width < 768 && onlyLarge) setShow(false)
 
-    addEventListener("resize", (event) => {
-      if (window.screen.width < 768 && onlyLarge) setShow(false);
-      else setShow(true);
-    });
-  }, []);
+    addEventListener('resize', (event) => {
+      if (window.screen.width < 768 && onlyLarge) setShow(false)
+      else setShow(true)
+    })
+  }, [])
 
-  if (!show) return <></>;
+  if (!show) return <></>
 
   if (image)
-    return <img src={image} className="w-12 h-12 rounded-full object-cover" />;
+    return <img src={image} className="w-12 h-12 rounded-full object-cover" />
   else
     return (
       <div
@@ -142,5 +140,5 @@ function UserAvatar({ image, name, onlyLarge }: any) {
           {getInitials(name)}
         </span>
       </div>
-    );
+    )
 }

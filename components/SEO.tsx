@@ -1,19 +1,19 @@
-import Head from "next/head";
+import Head from 'next/head'
 
 interface IProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  keywords?: string[];
+  title?: string
+  description?: string
+  image?: string
+  keywords?: string[]
 }
 
 const defaultValues: IProps = {
-  title: "LabelBlind: Digitising Food Labelling",
-  description: "Getting Food Products Market Ready for MSMEs and FPOs",
+  title: 'LabelBlind: Digitising Food Labelling',
+  description: 'Getting Food Products Market Ready for MSMEs and FPOs',
   image:
-    "https://www.labelblind.com/_next/image?url=%2Flogo-white-sm.png&w=256&q=75",
-  keywords: ["food", "labelling"],
-};
+    'https://www.labelblind.com/_next/image?url=%2Flogo-white-sm.png&w=256&q=75',
+  keywords: ['food', 'labelling'],
+}
 
 export default function SEO(props: IProps) {
   return (
@@ -36,5 +36,5 @@ export default function SEO(props: IProps) {
       />
       <meta property="og:image" content={props.image || defaultValues.image} />
     </Head>
-  );
+  )
 }

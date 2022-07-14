@@ -24,7 +24,7 @@ export function isTweetLiked(id: string): boolean {
     if (localTweets != undefined) tweets = JSON.parse(localTweets);
 
     // Check if the id exits in the array
-    for (let i=0; i<tweets.length; i++) {
+    for (let i = 0; i < tweets.length; i++) {
         if (tweets[i]._id == id) return true;
     }
 
